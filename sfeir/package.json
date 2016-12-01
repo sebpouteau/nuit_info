@@ -1,0 +1,22 @@
+{
+  "name": "bot",
+  "version": "0.0.1",
+  "description": "Bot pour le defis proposé par SFEIR lors de la nuit infos 2016",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebpouteau/nuit_info.git"
+  },
+  "author": "Sebastien Pouteau, Arnaud Delpeyroux",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sebpouteau/nuit_info/issues"
+  },
+  "homepage": "https://github.com/sebpouteau/nuit_info#readme",
+  "dependencies": {
+    "botbuilder": "^3.4.4"
+  }
+}
