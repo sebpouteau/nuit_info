@@ -22,7 +22,133 @@ server.post('/api/messages', connector.listen());
 //=========================================================
 // Bots Dialogs
 //=========================================================
+bot.dialog('/',[
+    function(session) {
+        builder.Prompts.choice(session, "Hello, in which country are you ?\n choices :", 
+        ["France", "Germany", "Spain", "Italia", "Great Britain"]);
+    },
+    function(session, results){
+        session.userData.country = results.response.entity  ;
+        session.send('You have choice : %s!', session.userData.country);
+        session.beginDialog('/' + session.userData.country);
+    }
+]);
 
-bot.dialog('/', function (session) {
-    session.send("Hello World");
-});
+bot.dialog('/France', [
+    function(session) {
+        builder.Prompts.choice(session, "In wich city are you ?\nChoices :", 
+        ["Paris",
+        "Marseille",
+        "Lyon",
+        "Toulouse",
+        "Nice",
+        "Nantes",
+        "Strasbourg",
+        "Montpellier",
+        "Bordeaux",
+        "Lille",
+        "Calais"]);
+    },
+    function(session, results){
+        session.userData.city = results.response.entity  ;
+        session.send('You have choice : %s!', session.userData.city);
+        session.beginDialog('/Choices');
+    }
+]);
+
+bot.dialog('/Germany', [
+    function(session) {
+        builder.Prompts.choice(session, "In wich city are you ?\nChoices :", 
+        ["Berlin",
+        "Hambourg",
+        "Munich",
+        "Cologne",
+        "Francfort-sur-le-Main",
+        "Stuttgart",
+        "Düsseldorf",
+        "Dortmund",
+        "Essen",
+        ]);
+    },
+    function(session, results){
+
+        session.userData.city = results.response.entity  ;
+        session.send('You have choice : %s!', session.userData.city);
+        session.beginDialog('/Choices');
+    }
+]);
+
+bot.dialog('/Spain', [
+    function(session) {
+        builder.Prompts.choice(session, "In wich city are you ?\nChoices :", 
+        ["Madrid",
+        "Barcelone",
+        "Valence",
+        "Séville",
+        "Bilbao",
+        "Malaga",
+        "Asturies",
+        ]);
+    },
+    function(session, results){
+        session.userData.city = results.response.entity  ;
+        session.send('You have choice : %s!', session.userData.city);
+        session.beginDialog('/Choices');
+    }
+]);
+bot.dialog('/Italia', [
+    function(session) {
+        builder.Prompts.choice(session, "In wich city are you ?\nChoices :",  
+        ["Rome",
+        "Milan",
+        "Naples",
+        "Turin",
+        "Palerme",
+        "Gênes",
+        "Florence",
+        ]);
+    },
+    function(session, results){
+        session.userData.city = results.response.entity  ;
+        session.send('You have choice : %s!', session.userData.city);
+        session.beginDialog('/Choices');
+    }
+]);
+
+bot.dialog('/Great Britain', [
+    function(session) {
+        builder.Prompts.choice(session, "In wich city are you ?\nChoices :", 
+        ["Londres",
+        "Birmingham",
+        "Glasgow",
+        "Manchester",
+        "Édimbourg",
+        "Liverpool",
+        "Bristol",
+        ]);
+    },
+    
+    function(session, results){
+        session.userData.city = results.response.entity  ;
+        session.send('You have choice : %s!', session.userData.city);
+        session.beginDialog('/Choices');
+    }
+]);
+
+
+bot.dialog('/Choices', [
+    function(session){
+        builder.Prompts.choice(session, "In wich city are you ?\nChoices :", 
+        ["Nearest Hospital", 
+        "Nearest Reception Center", 
+        "Nearest doctor", 
+        "Nearest grossery", 
+        "Nearest food bank",
+        "Nearest contacts"]);
+    },
+    function(session, results){
+        session.userData.city = results.response.entity  ;
+        session.send('You have choice : %s!\nThanks You!', session.userData.city);
+        session.endDialog();
+    }
+]);
