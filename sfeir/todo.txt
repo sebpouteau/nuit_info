@@ -4,3 +4,31 @@ Faire un Bot avec toute la techno requise :
 	- Donner des contacts proches (medecins, hopitaux, samus, ...)
 	- Donner des contact de membres associatif ou benevoles pouvant et voulant aider
 	- Suppermarché les plus proches (acces nouriture)
+
+hospitaux
+centre d'acceuils
+medecins
+supermarchés
+banques alimentaires
+contact
+
+
+anything : trigger the Bot
+	-> Hello, in wich country are you ?
+		Choices : 
+			- France
+			- Germany
+			- Algeria
+			- Turkey
+			- Great Britain
+				-> In wich city ?
+					Choices : 10 plus grandes villes du pays
+						-> What do you need ?
+						Choices : 
+							- hospital
+							- reception center
+							- medics
+							- grossery
+							- food bank
+							- contacts
+								-> List souhaitée
