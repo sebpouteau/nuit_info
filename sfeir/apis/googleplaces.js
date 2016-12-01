@@ -9,7 +9,6 @@ function Search(country, city, types, callback) {
 	geocoder.geocode(city + " " + country, function (err, data){
 		if (err) throw err;
 		var loc = data.results[0].geometry.location;
-		console.log(JSON.stringify(loc));
 		var locPar = loc.lat + ',' + loc.lng;
 
 		const param = {
@@ -20,7 +19,12 @@ function Search(country, city, types, callback) {
 		places.nearbySearch(param, function (err, results){
 			var result = [];
 			for (var attrs of results.body.results) {
-				result.push(attrs.name + " : " + attrs.vicinity);
+				result.push({
+					name : attrs.name,
+					adress : attrs.vicinity,
+					lat: attrs.geometry.location.lat,
+					lng: attrs.geometry.location.lng
+				});
 			}
 			if (callback) callback(result);
 			
