@@ -1,0 +1,6 @@
+Faire un Bot avec toute la techno requise : 
+
+	- Donner les camp et structures d'acceuils les plus proche pour les migrants
+	- Donner des contacts proches (medecins, hopitaux, samus, ...)
+	- Donner des contact de membres associatif ou benevoles pouvant et voulant aider
+	- Suppermarché les plus proches (acces nouriture)
