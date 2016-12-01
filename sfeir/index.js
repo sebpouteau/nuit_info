@@ -1,6 +1,6 @@
 var restify = require('restify');
 var builder = require('botbuilder');
-
+var getHosto = require('./apis/googleplaces.js').getHospital;
 //=========================================================
 // Bot Setup
 //=========================================================
@@ -149,6 +149,11 @@ bot.dialog('/Choices', [
     function(session, results){
         session.userData.city = results.response.entity  ;
         session.send('You have choice : %s!\nThanks You!', session.userData.city);
+		getHosto("France", "Aire sur Adour", function (results){
+			for (var s of results){
+				session.send(s);
+			}
+		})
         session.endDialog();
     }
 ]);
