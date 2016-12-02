@@ -58,6 +58,10 @@
 	margin-top: 20px;
 }
 
+.navbar-header{
+    width: 50%;
+}
+
 .top-bar {
   background: #666;
   color: white;
