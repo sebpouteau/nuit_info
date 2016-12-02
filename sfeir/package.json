@@ -19,7 +19,6 @@
   "dependencies": {
     "botbuilder": "^3.4.4",
     "geocoder": "^0.2.2",
-    "google-places": "0.0.2",
     "http": "0.0.0",
     "node-googleplaces": "^0.1.2",
     "restify": "^4.3.0"
