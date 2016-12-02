@@ -18,17 +18,35 @@
 <body>
     <div id="info">
         <div>
-            Vies: <span id="num-lifes">5</span>
+            Vies: <span id="num-lifes"></span>
         </div>
         <div>
-            Score: <span id="score">0</span>
+            Score: <span id="score"></span>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/mesh.js"></script>
-
     <script>
+    function rand(a, b) {
+        return (b - a) * Math.random() + a;
+    }
+
+    function display(num_lifes, score) {
+        document.getElementById('num-lifes').innerHTML = num_lifes;
+        document.getElementById('score').innerHTML = score;
+    }
+
+    function Mesh(x, y, z, col) {
+        this.object = new THREE.Mesh(
+            new THREE.BoxGeometry(x, y, z),
+            new THREE.MeshLambertMaterial({ color: col })
+        );
+
+        this.intersects = function (mesh) {
+            return new THREE.Box3().setFromObject(this.object)
+                    .intersectsBox(new THREE.Box3().setFromObject(mesh.object));
+        }
+    }
+
     window.onload = function() {
         var num_lifes, score, lost, obstacles, lastTime;
 
@@ -55,7 +73,6 @@
         plane.rotation.set(-Math.PI / 2, 0, 0);
         scene.add(plane);
 
-
         var init = function() {
             num_lifes = 5;
             score = 0;
@@ -64,6 +81,7 @@
             lastTime = Date.now();
 
             boat.object.position.set(0, 0, 10);
+            display(num_lifes, score);
         }
 
         var update = function () {
@@ -71,8 +89,8 @@
 
             requestAnimationFrame(update);
 
-            if (Date.now() - lastTime > 1000 / (score / 1000 + 1)) {
-                var obst = new Mesh(rand(2, 5), rand(2, 10), rand(2, 5), 0xFFFFFF);
+            if (Date.now() - lastTime > 1000 / (score / 500 + 1)) {
+                var obst = new Mesh(rand(2, 5), rand(2, 10), rand(2, 5), 0x00AA00);
                 obst.object.position.set(rand(-30, 30), 0, -150);
                 scene.add(obst.object);
                 obstacles.push(obst);
@@ -90,29 +108,21 @@
 
                     num_lifes--;
                     display(num_lifes, score);
-                    
+
                     if (num_lifes <= 0) {
                         lost = true;
                         if (confirm("Vous avez perdu, voulez-vous recommencer ?")) {
-                            lost = false;
-                            score = 0;
-                            num_lifes = 5;
-
                             // Delete remaining items.
-                            for (var i = 0 ; i < obstacles.length ; i++) {
+                            for (var i = 0 ; i < obstacles.length ; i++)
                                 if (obstacles[i])
                                     scene.remove(obstacles[i].object);
-                            }
 
                             init();
-                            display(num_lifes, score);
                         }
-
                         return;
                     }
-
                 }
-                else if (obst.object.position.z < 50)
+                else if (obst.object.position.z < 20)
                     obst.object.translateZ(1);
 
                 else {
@@ -120,6 +130,10 @@
                     obstacles[i] = null;
                 }
             }
+
+            // Object removing.
+            while (obstacles.length > 0 && obstacles[0] == null)
+                obstacles.splice(0, 1);
 
             display(num_lifes, ++score);
         }
@@ -135,9 +149,9 @@
         update();
         render();
 
-        alert("Bienvenue\n"
-            + "Vous dirigez un bateau d'immigrants (rouge) devant éviter des obstacles (jaune) qui sont le long de la mer\n"
-            + "Utilisez les flèches directionnelles pour diriger le bateau\n"
+        alert("Bienvenue !\n"
+            + "Vous dirigez un bateau d'immigrants (bloc rouge) devant éviter des obstacles (blocs verts) qui se trouvent le long de la mer.\n"
+            + "Utilisez les flèches directionnelles pour diriger le bateau.\n"
             + "Tentez d'avoir le meilleur score !");
 
         // Keyboard handling.
