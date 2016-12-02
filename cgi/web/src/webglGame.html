@@ -72,7 +72,27 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
-    <div id="info">
+	<div class="container container-menu" >
+		<div class="menu col-sm-6" id="menu">
+			<div class="menu-content">
+			<h1>Bienvenue !</h1>
+			<h2>Règles du jeu :</h2>
+				<p>Vous dirigez un bateau d'immigrants (bloc rouge) devant éviter des obstacles (blocs verts) qui se trouvent le long de la mer.<br/>
+				Utilisez les flèches directionnelles pour diriger le bateau.<br/>
+				Tentez d'avoir le meilleur score !</p>
+			<button class="btn btn-primary" id="play">Play</button>
+			</div>
+		</div>
+		<div class="menu col-sm-6" id="lost_menu" style="display:none;">
+			<div class="menu-content">
+			<h1>Vous avez perdu!</h1>
+			<h3>Votre score : </h3>
+			<button class="btn btn-primary" id="replay">Rejouer</button>
+			<button class="btn btn-primary" id="exit"> Quitter</button>
+			</div>
+		</div>
+	</div>
+    <div id="info" style="display:none;">
         <div>
             Vies: <span id="num-lifes"></span>
         </div>
@@ -155,7 +175,6 @@
             }
 
             for (var i = 0 ; i < obstacles.length ; i++) {
-				$("#mainNav").hide();
                 var obst = obstacles[i];
 
                 if (!obst) continue;
@@ -167,18 +186,33 @@
                     display(num_lifes, score);
 
                     if (num_lifes <= 0) {
-						$("#mainNav").show();
                         lost = true;
-                        if (confirm("Vous avez perdu, voulez-vous recommencer ?")) {
-                            // Delete remaining items.
+						$(".container-menu").show();
+						$("#lost_menu").show();
+						$("#lost_menu h3").text($("#lost_menu h3").text() + score);
+						$("#mainNav").show();
+						$("canvas").hide();
+						$("#replay").click(function(){
+                           // Delete remaining items.
                             for (var i = 0 ; i < obstacles.length ; i++)
                                 if (obstacles[i])
                                     scene.remove(obstacles[i].object);
-
+							$("#mainNav").hide();
+							$("#lost_menu").hide();
+							$(".container-menu").hide();
+							$("canvas").show();
                             init();
-                        }
-                        return;
-                    }
+							update();
+                        });
+						$("#exit").click(function(){
+							for (var i = 0 ; i < obstacles.length ; i++)
+                                if (obstacles[i])
+                                    scene.remove(obstacles[i].object);
+							
+							$("#lost_menu").hide();
+							$("#menu").show();
+						});
+					}
                 }
                 else if (obst.object.position.z < 20)
                     obst.object.translateZ(1);
@@ -202,16 +236,18 @@
             renderer.setClearColor(0x00000, 1);
             renderer.render(scene, camera);
         };
-
-        init();
-        update();
-        render();
-
-        alert("Bienvenue !\n"
-            + "Vous dirigez un bateau d'immigrants (bloc rouge) devant éviter des obstacles (blocs verts) qui se trouvent le long de la mer.\n"
-            + "Utilisez les flèches directionnelles pour diriger le bateau.\n"
-            + "Tentez d'avoir le meilleur score !");
-
+		$("canvas").hide();
+		$("#play").click(function(){
+			$("#mainNav").hide();
+		    $("#menu").hide();
+			$(".container-menu").hide();
+			$("canvas").show();
+			init();
+			update();
+			render();
+			$("#info").show();
+		});
+			
         // Keyboard handling.
         document.addEventListener('keydown', function(event) {
             switch(event.which) {
