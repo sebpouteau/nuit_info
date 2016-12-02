@@ -46,6 +46,16 @@
   max-height:300px;
   overflow-x:hidden;
 }
+.logo {
+	float: left;
+    position: relative;
+    left: -50px;
+}
+
+.navbar-brand{
+	margin-top: 10px;
+}
+
 .top-bar {
   background: #666;
   color: white;
