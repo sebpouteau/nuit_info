@@ -14,7 +14,7 @@ $(document).ready(function(){
 	$.ajax({
 		url:"",
 		type: "POST",
-		data: "textInput",
+		data: textInput,
 		success: function(data){
 			addReceiveMessage(data);
 		}

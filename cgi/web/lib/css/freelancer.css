@@ -96,8 +96,9 @@ hr.star-primary:after {
 }
 @media (min-width: 768px) {
   .chat .container {
-    padding-top: 100px;
+    padding-top: 120px;
     padding-bottom: 100px;
+	min-height:500px;
   }
   .chat .intro-text .name {
     font-size: 4.75em;
@@ -115,6 +116,7 @@ header {
 header .container {
   padding-top: 100px;
   padding-bottom: 50px;
+  min-height:500px;
 }
 header img {
   display: block;
@@ -133,7 +135,7 @@ header .intro-text .skills {
 }
 @media (min-width: 768px) {
   header .container {
-    padding-top: 100px;
+    padding-top: 120px;
     padding-bottom: 100px;
   }
   header .intro-text .name {
@@ -164,7 +166,7 @@ header .intro-text .skills {
 }
 .navbar-custom .navbar-nav {
   letter-spacing: 1px;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 .navbar-custom .navbar-nav li a {
   color: white;
