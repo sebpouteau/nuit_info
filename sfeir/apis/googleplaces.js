@@ -1,6 +1,8 @@
 var geocoder = require("geocoder");
 var googleplaces = require('node-googleplaces');
 
+var contactsProvider = require('../dataAccess/ContactsDataAccess.js').getContacts;
+
 var API_KEY = 'AIzaSyArUUOi7DmNzp-5W9IlEI74hTw15g72O2w';
 var places = new googleplaces(API_KEY);
 
@@ -36,10 +38,6 @@ function GetHospitals (country, city, callback) {
 	Search(country, city, 'hospital', callback);
 }
 
-function GetReceptionCenter (country, city, callback) {
-	// appel bdd pour les camps de refugiées
-}
-
 function GetDoctors (country, city, callback) {
 	Search(country, city, 'doctor', callback);
 }
@@ -48,17 +46,11 @@ function GetGrossery (country, city, callback) {
 	Search(country, city, 'shopping_mall|grocery_or_supermarket', callback);
 }
 
-function GetFoodBank (country, city, callback) {
-	// appel bdd pour les banques alimentaires
-}
-
 function GetContacts (country, city, callback) {
-	// appel bdd pour les contacts
+	contactsProvider(country, city, callback);
 }
 
 exports.getHospital = GetHospitals;
-exports.getReceptionCenter = GetReceptionCenter;
 exports.getDoctors = GetDoctors;
 exports.getGrossery = GetGrossery;
-exports.getFoodBank = GetFoodBank;
 exports.getContacts = GetContacts;

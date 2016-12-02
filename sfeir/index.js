@@ -1,6 +1,11 @@
 var restify = require('restify');
 var builder = require('botbuilder');
-var getHosto = require('./apis/googleplaces.js').getHospital;
+var getHospitals = require('./apis/googleplaces.js').getHospital;
+var getContacts = require('./apis/googleplaces.js').getContacts;
+var getDoctors = require('./apis/googleplaces.js').getDoctors;
+var getGrossery = require('./apis/googleplaces.js').getGrossery;
+
+var WebConnector = require('./WebConnector.js').WebConnector;
 //=========================================================
 // Bot Setup
 //=========================================================
@@ -11,10 +16,22 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
    console.log('%s listening to %s', server.name, server.url); 
 });
   
-var connectorbis = new builder.ConsoleConnector().listen();
-var connectorter = new ConnectorClient
+
+var providers = {
+	"Nearest Hospital" : getHospitals,
+	"Nearest doctor" : getDoctors,
+	"Nearest grossery" : getGrossery,
+	"Nearest contacts" : getContacts,
+
+}
+
 // Create chat bot
 var connector = new builder.ChatConnector({
+    appId: process.env.MICROSOFT_APP_ID,
+    appPassword: process.env.MICROSOFT_APP_PASSWORD
+});
+
+var connectorbis = new WebConnector({
     appId: process.env.MICROSOFT_APP_ID,
     appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
@@ -142,19 +159,17 @@ bot.dialog('/Great Britain', [
 bot.dialog('/Choices', [
     function(session){
         builder.Prompts.choice(session, "In wich city are you ?\nChoices :", 
-        ["Nearest Hospital", 
-        "Nearest Reception Center", 
+        ["Nearest Hospital",
         "Nearest doctor", 
-        "Nearest grossery", 
-        "Nearest food bank",
+        "Nearest grossery",
         "Nearest contacts"]);
     },
     function(session, results){
-        session.userData.city = results.response.entity  ;
+        session.userData.choice = results.response.entity  ;
         session.send('You have choice : %s!\nThanks You!', session.userData.city);
-		getHosto("France", "Aire sur Adour", function (results){
+		providers[session.userData.choice](session.userData.country, session.userData.city, function (results){
 			for (var s of results){
-				session.send(s);
+				session.send(JSON.stringify(s));
 			}
 		})
         session.endDialog();

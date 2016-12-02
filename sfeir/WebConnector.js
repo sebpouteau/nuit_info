@@ -2,15 +2,15 @@
 var request = require('request');
 var async = require('async');
 var url = require('url');
-var utils = require('../utils');
-var logger = require('../logger');
+var utils = require('./node_modules/botbuilder/lib/bots/../utils');
+var logger = require('./node_modules/botbuilder/lib/bots/../logger');
 var jwt = require('jsonwebtoken');
-var oid = require('./OpenIdMetadata');
+var oid = require('./node_modules/botbuilder/lib/bots/./OpenIdMetadata');
 var zlib = require('zlib');
-var consts = require('../consts');
+var consts = require('./node_modules/botbuilder/lib/bots/../consts');
 var MAX_DATA_LENGTH = 65000;
-var ChatConnector = (function () {
-    function ChatConnector(settings) {
+var WebConnector = (function () {
+    function WebConnector(settings) {
         if (settings === void 0) { settings = {}; }
         this.settings = settings;
         if (!this.settings.endpoint) {
@@ -29,7 +29,7 @@ var ChatConnector = (function () {
         this.botConnectorOpenIdMetadata = new oid.OpenIdMetadata(this.settings.endpoint.botConnectorOpenIdMetadata);
         this.msaOpenIdMetadata = new oid.OpenIdMetadata(this.settings.endpoint.msaOpenIdMetadata);
     }
-    ChatConnector.prototype.listen = function () {
+    WebConnector.prototype.listen = function () {
         var _this = this;
         return function (req, res) {
             if (req.body) {
@@ -47,7 +47,7 @@ var ChatConnector = (function () {
             }
         };
     };
-    ChatConnector.prototype.verifyBotFramework = function (req, res) {
+    WebConnector.prototype.verifyBotFramework = function (req, res) {
         var _this = this;
         var token;
         var isEmulator = req.body['channelId'] === 'emulator';
@@ -85,7 +85,7 @@ var ChatConnector = (function () {
                         jwt.verify(token, key, verifyOptions);
                     }
                     catch (err) {
-                        logger.error('ChatConnector: receive - invalid token. Check bot\'s app ID & Password.');
+                        logger.error('WebConnector: receive - invalid token. Check bot\'s app ID & Password.');
                         res.status(403);
                         res.end();
                         return;
@@ -93,7 +93,7 @@ var ChatConnector = (function () {
                     _this.dispatch(req.body, res);
                 }
                 else {
-                    logger.error('ChatConnector: receive - invalid signing key or OpenId metadata document.');
+                    logger.error('WebConnector: receive - invalid signing key or OpenId metadata document.');
                     res.status(500);
                     res.end();
                     return;
@@ -101,20 +101,20 @@ var ChatConnector = (function () {
             });
         }
         else if (isEmulator && !this.settings.appId && !this.settings.appPassword) {
-            logger.warn(req.body, 'ChatConnector: receive - emulator running without security enabled.');
+            logger.warn(req.body, 'WebConnector: receive - emulator running without security enabled.');
             req.body['useAuth'] = false;
             this.dispatch(req.body, res);
         }
         else {
-            logger.error('ChatConnector: receive - no security token sent.');
+            logger.error('WebConnector: receive - no security token sent.');
             res.status(401);
             res.end();
         }
     };
-    ChatConnector.prototype.onEvent = function (handler) {
+    WebConnector.prototype.onEvent = function (handler) {
         this.handler = handler;
     };
-    ChatConnector.prototype.send = function (messages, done) {
+    WebConnector.prototype.send = function (messages, done) {
         var _this = this;
         async.eachSeries(messages, function (msg, cb) {
             try {
@@ -122,7 +122,7 @@ var ChatConnector = (function () {
                     _this.postMessage(msg, cb);
                 }
                 else {
-                    logger.error('ChatConnector: send - message is missing address or serviceUrl.');
+                    logger.error('WebConnector: send - message is missing address or serviceUrl.');
                     cb(new Error('Message missing address or serviceUrl.'));
                 }
             }
@@ -131,7 +131,7 @@ var ChatConnector = (function () {
             }
         }, done);
     };
-    ChatConnector.prototype.startConversation = function (address, done) {
+    WebConnector.prototype.startConversation = function (address, done) {
         if (address && address.user && address.bot && address.serviceUrl) {
             var options = {
                 method: 'POST',
@@ -163,17 +163,17 @@ var ChatConnector = (function () {
                     }
                 }
                 if (err) {
-                    logger.error('ChatConnector: startConversation - error starting conversation.');
+                    logger.error('WebConnector: startConversation - error starting conversation.');
                 }
                 done(err, adr);
             });
         }
         else {
-            logger.error('ChatConnector: startConversation - address is invalid.');
+            logger.error('WebConnector: startConversation - address is invalid.');
             done(new Error('Invalid address.'));
         }
     };
-    ChatConnector.prototype.getData = function (context, callback) {
+    WebConnector.prototype.getData = function (context, callback) {
         var _this = this;
         try {
             var root = this.getStoragePath(context.address);
@@ -253,7 +253,7 @@ var ChatConnector = (function () {
             callback(e instanceof Error ? e : new Error(e.toString()), null);
         }
     };
-    ChatConnector.prototype.saveData = function (context, data, callback) {
+    WebConnector.prototype.saveData = function (context, data, callback) {
         var _this = this;
         var list = [];
         function addWrite(field, botData, url) {
@@ -338,13 +338,13 @@ var ChatConnector = (function () {
             }
         }
     };
-    ChatConnector.prototype.dispatch = function (messages, res) {
+    WebConnector.prototype.dispatch = function (messages, res) {
         var _this = this;
         var list = Array.isArray(messages) ? messages : [messages];
         list.forEach(function (msg) {
             try {
                 _this.prepIncomingMessage(msg);
-                logger.info(msg, 'ChatConnector: message received.');
+                logger.info(msg, 'WebConnector: message received.');
                 _this.handler([msg]);
             }
             catch (e) {
@@ -354,8 +354,8 @@ var ChatConnector = (function () {
         res.status(202);
         res.end();
     };
-    ChatConnector.prototype.postMessage = function (msg, cb) {
-        logger.info(address, 'ChatConnector: sending message.');
+    WebConnector.prototype.postMessage = function (msg, cb) {
+        logger.info(address, 'WebConnector: sending message.');
         this.prepOutgoingMessage(msg);
         var address = msg.address;
         msg['from'] = address.bot;
@@ -384,7 +384,7 @@ var ChatConnector = (function () {
             });
         }
     };
-    ChatConnector.prototype.authenticatedRequest = function (options, callback, refresh) {
+    WebConnector.prototype.authenticatedRequest = function (options, callback, refresh) {
         var _this = this;
         if (refresh === void 0) { refresh = false; }
         if (refresh) {
@@ -425,7 +425,7 @@ var ChatConnector = (function () {
             }
         });
     };
-    ChatConnector.prototype.getAccessToken = function (cb) {
+    WebConnector.prototype.getAccessToken = function (cb) {
         var _this = this;
         if (!this.accessToken || new Date().getTime() >= this.accessTokenExpires) {
             var opt = {
@@ -459,7 +459,7 @@ var ChatConnector = (function () {
             cb(null, this.accessToken);
         }
     };
-    ChatConnector.prototype.addAccessToken = function (options, cb) {
+    WebConnector.prototype.addAccessToken = function (options, cb) {
         if (this.settings.appId && this.settings.appPassword) {
             this.getAccessToken(function (err, token) {
                 if (!err && token) {
@@ -477,7 +477,7 @@ var ChatConnector = (function () {
             cb(null);
         }
     };
-    ChatConnector.prototype.getStoragePath = function (address) {
+    WebConnector.prototype.getStoragePath = function (address) {
         var path;
         switch (address.channelId) {
             case 'emulator':
@@ -485,7 +485,7 @@ var ChatConnector = (function () {
                     path = address.serviceUrl;
                 }
                 else {
-                    throw new Error('ChatConnector.getStoragePath() missing address.serviceUrl.');
+                    throw new Error('WebConnector.getStoragePath() missing address.serviceUrl.');
                 }
                 break;
             default:
@@ -494,7 +494,7 @@ var ChatConnector = (function () {
         }
         return path + '/v3/botstate/' + encodeURIComponent(address.channelId);
     };
-    ChatConnector.prototype.prepIncomingMessage = function (msg) {
+    WebConnector.prototype.prepIncomingMessage = function (msg) {
         utils.moveFieldsTo(msg, msg, {
             'locale': 'textLocale',
             'channelData': 'sourceEvent'
@@ -512,14 +512,14 @@ var ChatConnector = (function () {
                 address.serviceUrl = u.protocol + '//' + u.host;
             }
             catch (e) {
-                console.error("ChatConnector error parsing '" + address.serviceUrl + "': " + e.toString());
+                console.error("WebConnector error parsing '" + address.serviceUrl + "': " + e.toString());
             }
         }
         if (msg.source == 'facebook' && msg.sourceEvent && msg.sourceEvent.message && msg.sourceEvent.message.quick_reply) {
             msg.text = msg.sourceEvent.message.quick_reply.payload;
         }
     };
-    ChatConnector.prototype.prepOutgoingMessage = function (msg) {
+    WebConnector.prototype.prepOutgoingMessage = function (msg) {
         if (msg.attachments) {
             var attachments = [];
             for (var i = 0; i < msg.attachments.length; i++) {
@@ -563,9 +563,9 @@ var ChatConnector = (function () {
         delete msg.agent;
         delete msg.source;
     };
-    return ChatConnector;
+    return WebConnector;
 }());
-exports.ChatConnector = ChatConnector;
+exports.WebConnector = WebConnector;
 var toAddress = {
     'id': 'id',
     'channelId': 'channelId',
