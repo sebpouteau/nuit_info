@@ -6,11 +6,11 @@ $(document).ready(function(){
 	console.log(textInput);
 	var message = $("<div></div>").addClass("row msg_container base_sent")
 	.append($("<div></div>").addClass("col-xs-10 col-md-10")
-	.append($("<div></div>").addClass("messages msg_sent)")
+	.append($("<div></div>").addClass("messages msg_sent")
 	.append($("<p></p>").text(textInput))))
 	.append($("<div></div>").addClass("col-md-2 col-xs-2 avatar").html('<img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive "><div class="triangle-up-sent"></div>'));
 	$(".panel-body.msg_container_base").append(message);
-	console.log("ici");
+	$("#btn-input").val("");
 	$.ajax({
 		method: 'POST',
 		url:"http://localhost:3978/api/messages",
