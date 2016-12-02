@@ -1,0 +1,80 @@
+{ name: 'Epiceries SARL NH',
+  adress: '57 Rue Saint-Jacques, Paris',
+  lat: 48.850344,
+  lng: 2.345464 }
+{ name: 'Sarl 5K Pere Et Fils',
+  adress: '60 Rue de Turbigo, Paris',
+  lat: 48.86587149999999,
+  lng: 2.3585444 }
+{ name: 'Crémerie Du Panthéon',
+  adress: '153 Rue Saint-Jacques, Paris',
+  lat: 48.8463766,
+  lng: 2.3434635 }
+{ name: 'l\'Orangerie de Paris',
+  adress: '20 Passage de la Bonne Graine, Paris',
+  lat: 48.8523893,
+  lng: 2.3772778 }
+{ name: 'Épicerie de Trévise',
+  adress: '17 Rue de Trévise, Paris',
+  lat: 48.8736851,
+  lng: 2.345171300000001 }
+{ name: 'Graineterie du Marché',
+  adress: '8 Place d\'Aligre, Paris',
+  lat: 48.8485439,
+  lng: 2.3781103 }
+{ name: 'El Gallab El Houssin',
+  adress: '13 Rue de Montholon, Paris',
+  lat: 48.8764877,
+  lng: 2.3472539 }
+{ name: 'NEW MARKET',
+  adress: '199 Rue du Faubourg Saint-Antoine, Paris',
+  lat: 48.85051800000001,
+  lng: 2.3823054 }
+{ name: 'Souabni Zouhaier',
+  adress: '61 Rue Léon Frot, Paris',
+  lat: 48.8565808,
+  lng: 2.3855018 }
+{ name: 'City Market',
+  adress: '61 Rue Léon Frot, Paris',
+  lat: 48.8564892,
+  lng: 2.3855512 }
+{ name: 'Talbi Mohamed',
+  adress: '26 Rue de Navarin, Paris',
+  lat: 48.8799777,
+  lng: 2.3377422 }
+{ name: 'Le Marché Sacré Coeur',
+  adress: '62 Rue Notre Dame de Lorette, Paris',
+  lat: 48.880146,
+  lng: 2.3356486 }
+{ name: 'Carrefour Express',
+  adress: '47 Boulevard de Vaugirard, Paris',
+  lat: 48.8409554,
+  lng: 2.3175268 }
+{ name: 'SuperMarket 33',
+  adress: '33 Boulevard de Clichy, Paris',
+  lat: 48.88268219999999,
+  lng: 2.335557 }
+{ name: 'Super 9',
+  adress: '9 Rue Ernest Cresson, Paris',
+  lat: 48.832598,
+  lng: 2.329275 }
+{ name: 'CoucheTardMarket.fr',
+  adress: '60 Boulevard de Clichy, Paris',
+  lat: 48.88332199999999,
+  lng: 2.3348854 }
+{ name: 'La Vegan Factory',
+  adress: '106 Rue de Reuilly, Paris',
+  lat: 48.8408004,
+  lng: 2.3938327 }
+{ name: 'Alimentation générale',
+  adress: '3 Rue Boyer-Barret, Paris',
+  lat: 48.8332586,
+  lng: 2.3174152 }
+{ name: 'Galerie Oslo',
+  adress: 'Rue du Disque, Paris',
+  lat: 48.8244836,
+  lng: 2.3658669 }
+{ name: 'Yatoo Partoo',
+  adress: 'Square Georges Contenot, Paris',
+  lat: 48.8363924,
+  lng: 2.394357 }

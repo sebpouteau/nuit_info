@@ -10,6 +10,15 @@ $(document).ready(function(){
 	.append($("<p></p>").text(textInput))))
 	.append($("<div></div>").addClass("col-md-2 col-xs-2 avatar").html('<img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive "><div class="triangle-up-sent"></div>'));
 	$(".panel-body.msg_container_base").append(message);
+	
+	$.ajax({
+		url:"",
+		type: "POST",
+		data: "textInput",
+		success: function(data){
+			addReceiveMessage(data);
+		}
+	});
 }   
 
 function addReceiveMessage(textMessage){

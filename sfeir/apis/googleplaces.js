@@ -10,11 +10,11 @@ function Search(country, city, types, callback) {
 		if (err) throw err;
 		var loc = data.results[0].geometry.location;
 		var locPar = loc.lat + ',' + loc.lng;
-
 		const param = {
 			location: locPar,
 			types: types,
-			radius: 50000
+			rankby: "distance",
+			opennow: true
 		}
 		places.nearbySearch(param, function (err, results){
 			var result = [];
@@ -33,7 +33,32 @@ function Search(country, city, types, callback) {
 }
 
 function GetHospitals (country, city, callback) {
-	Search(country, city, ['hospital', 'health', 'establishment'], callback);
+	Search(country, city, 'hospital', callback);
+}
+
+function GetReceptionCenter (country, city, callback) {
+	// appel bdd pour les camps de refugiées
+}
+
+function GetDoctors (country, city, callback) {
+	Search(country, city, 'doctor', callback);
+}
+
+function GetGrossery (country, city, callback) {
+	Search(country, city, 'shopping_mall|grocery_or_supermarket', callback);
+}
+
+function GetFoodBank (country, city, callback) {
+	// appel bdd pour les banques alimentaires
+}
+
+function GetContacts (country, city, callback) {
+	// appel bdd pour les contacts
 }
 
 exports.getHospital = GetHospitals;
+exports.getReceptionCenter = GetReceptionCenter;
+exports.getDoctors = GetDoctors;
+exports.getGrossery = GetGrossery;
+exports.getFoodBank = GetFoodBank;
+exports.getContacts = GetContacts;

@@ -1,6 +1,6 @@
-var getHosto = require('./apis/googleplaces.js').getHospital;
+var get  = require('./apis/googleplaces.js').getGrossery;
 
-getHosto("France", "Aire sur Adour", function(result){
+get("France", "Paris", function(result){
 	for (var r of result){
 		console.log(r);
 	}
