@@ -30,8 +30,9 @@
 .chat-window{
     bottom:0;
     position:relative;
-    float:right;
-    margin-left:10px;
+    float:left;
+    margin-left:10%;
+	width: 80%;
 }
 .chat-window > div > .panel{
     border-radius: 5px 5px 0 0;
