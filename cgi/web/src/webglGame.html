@@ -86,7 +86,7 @@
 		<div class="menu col-sm-6" id="lost_menu" style="display:none;">
 			<div class="menu-content">
 			<h1>Vous avez perdu!</h1>
-			<h3>Votre score : </h3>
+			<h3></h3>
 			<button class="btn btn-primary" id="replay">Rejouer</button>
 			<button class="btn btn-primary" id="exit"> Quitter</button>
 			</div>
@@ -189,7 +189,7 @@
                         lost = true;
 						$(".container-menu").show();
 						$("#lost_menu").show();
-						$("#lost_menu h3").text($("#lost_menu h3").text() + score);
+						$("#lost_menu h3").text("Votre score : " + score);
 						$("#mainNav").show();
 						$("canvas").hide();
 						$("#replay").click(function(){
