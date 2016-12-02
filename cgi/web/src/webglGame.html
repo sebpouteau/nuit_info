@@ -7,12 +7,34 @@
     body { margin: 0; }
     canvas { width: 100%; height: 100% }
     #info {
+		
         position: absolute;
         color: #FFFFFF;
         padding: 10px;
         font-family: 'Courier';
     }
     </style>
+	
+	
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CookieBot- Nuit de l'info 2016-</title>
+	<link rel="shortcut icon" href="../images/cookiebots.jpg">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../lib/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Theme CSS -->
+    <link href="../lib/css/freelancer.css" rel="stylesheet">
+	<link href="../lib/css/chat.css" rel="stylesheet">
+
+
+    <!-- Custom Fonts -->
+    <link href="../lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="../lib/js/jquery.min.js"></script>
 </head>
 
 <body>
@@ -20,8 +42,8 @@
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-			<img class="logo" style="max-width:100px; margin-top: -7px;"
-             src="../images/i-love-twirling-baton.png">
+			<img class="logo" style="max-width:100px; max-height:100px; margin-top: -7px;"
+             src="../images/logo_ecureuil.jpg">
                 <a class="navbar-brand" href="index.html">CookieBot</a>
             </div>
 
@@ -30,6 +52,9 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="hidden">
                         <a href="index.html"></a>
+                    </li>
+					<li>
+                        <a href="index.html">Accueil</a>
                     </li>
                     <li>
                         <a href="nyjis.html">CGI défis</a>
@@ -40,9 +65,7 @@
                     <li>
                         <a href="bonCompte.html">Compte pour les amis</a>
                     </li>
-					<li>
-                        <a href="../../../webgl/index.html">WebGl Game</a>
-                    </li>
+	
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -132,6 +155,7 @@
             }
 
             for (var i = 0 ; i < obstacles.length ; i++) {
+				$("#mainNav").hide();
                 var obst = obstacles[i];
 
                 if (!obst) continue;
@@ -143,6 +167,7 @@
                     display(num_lifes, score);
 
                     if (num_lifes <= 0) {
+						$("#mainNav").show();
                         lost = true;
                         if (confirm("Vous avez perdu, voulez-vous recommencer ?")) {
                             // Delete remaining items.
