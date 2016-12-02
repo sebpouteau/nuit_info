@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebGL app</title>
+    <meta charset=utf-8>
+    <style>
+    body { margin: 0; }
+    canvas { width: 100%; height: 100% }
+    #info {
+        position: absolute;
+        color: #FFFFFF;
+        padding: 10px;
+        font-family: 'Courier';
+    }
+    </style>
+</head>
+
+<body>
+    <div id="info">
+        <div>
+            Vies: <span id="num-lifes">5</span>
+        </div>
+        <div>
+            Score: <span id="score">0</span>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/mesh.js"></script>
+
+    <script>
+    window.onload = function() {
+        var num_lifes, score, lost, obstacles, lastTime;
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.set(0, 20, 20);
+        camera.lookAt(scene.position);
+
+        var boat = new Mesh(5, 5, 10, 0xFF0000);
+        scene.add(boat.object);
+
+        var light = new THREE.PointLight(0xFFFF00);
+        light.position.set(0, 10, 10);
+        scene.add(light);
+
+        var plane = new THREE.Mesh(
+            new THREE.PlaneGeometry(300, 300),
+            new THREE.MeshBasicMaterial({color: 0x000055})
+        );
+        plane.rotation.set(-Math.PI / 2, 0, 0);
+        scene.add(plane);
+
+
+        var init = function() {
+            num_lifes = 5;
+            score = 0;
+            lost = false;
+            obstacles = [];
+            lastTime = Date.now();
+
+            boat.object.position.set(0, 0, 10);
+        }
+
+        var update = function () {
+            if (lost) return;
+
+            requestAnimationFrame(update);
+
+            if (Date.now() - lastTime > 1000 / (score / 1000 + 1)) {
+                var obst = new Mesh(rand(2, 5), rand(2, 10), rand(2, 5), 0xFFFFFF);
+                obst.object.position.set(rand(-30, 30), 0, -150);
+                scene.add(obst.object);
+                obstacles.push(obst);
+
+                lastTime = Date.now();
+            }
+
+            for (var i = 0 ; i < obstacles.length ; i++) {
+                var obst = obstacles[i];
+
+                if (!obst) continue;
+                if (boat.intersects(obst)) {
+                    scene.remove(obst.object);
+                    obstacles[i] = null;
+
+                    num_lifes--;
+                    display(num_lifes, score);
+                    
+                    if (num_lifes <= 0) {
+                        lost = true;
+                        if (confirm("Vous avez perdu, voulez-vous recommencer ?")) {
+                            lost = false;
+                            score = 0;
+                            num_lifes = 5;
+
+                            // Delete remaining items.
+                            for (var i = 0 ; i < obstacles.length ; i++) {
+                                if (obstacles[i])
+                                    scene.remove(obstacles[i].object);
+                            }
+
+                            init();
+                            display(num_lifes, score);
+                        }
+
+                        return;
+                    }
+
+                }
+                else if (obst.object.position.z < 50)
+                    obst.object.translateZ(1);
+
+                else {
+                    scene.remove(obst.object);
+                    obstacles[i] = null;
+                }
+            }
+
+            display(num_lifes, ++score);
+        }
+
+        var render = function () {
+            requestAnimationFrame(render);
+
+            renderer.setClearColor(0x00000, 1);
+            renderer.render(scene, camera);
+        };
+
+        init();
+        update();
+        render();
+
+        alert("Bienvenue\n"
+            + "Vous dirigez un bateau d'immigrants (rouge) devant éviter des obstacles (jaune) qui sont le long de la mer\n"
+            + "Utilisez les flèches directionnelles pour diriger le bateau\n"
+            + "Tentez d'avoir le meilleur score !");
+
+        // Keyboard handling.
+        document.addEventListener('keydown', function(event) {
+            switch(event.which) {
+                case 37: // left
+                    if (boat.object.position.x > -20)
+                        boat.object.translateX(-2);
+                    break;
+
+                case 38: // up
+                    if (boat.object.position.z > -10)
+                        boat.object.translateZ(-2);
+                    break;
+
+                case 39: // right
+                    if (boat.object.position.x < 20)
+                        boat.object.translateX(2);
+                    break;
+
+                case 40: // down
+                    if (boat.object.position.z < 10)
+                        boat.object.translateZ(2);
+                    break;
+
+                default: return; // exit this handler for other keys
+            }
+
+            event.preventDefault(); // prevent the default action (scroll / move caret)
+        });
+    };
+    </script>
+</body>
+</html>
